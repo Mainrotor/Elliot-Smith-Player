@@ -1,0 +1,19 @@
+
+
+        <main>
+            <navigation>
+            </navigation>
+
+            <body>
+                <header>
+                </header>
+                
+            </body>
+
+            <friendBar>
+            </friendBar>
+        </main>
+
+        <footer>
+        </footer>
+
