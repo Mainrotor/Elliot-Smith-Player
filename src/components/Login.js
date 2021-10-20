@@ -7,7 +7,7 @@ const Login = (props) => {
 
   const [localEmail, setLocalEmail] = useState("");
   const [localPass, setLocalPass] = useState("");
-  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(null);
 
   const handleEmailChange = (e) => {
     setLocalEmail(e.target.value);
@@ -17,7 +17,19 @@ const Login = (props) => {
     setLocalPass(e.target.value);
   };
 
-  const loginSuccessChecker = (e) => {};
+  const loginSuccessChecker = () => {
+    switch (loginSuccess){
+      case false:
+        return <div id="loginFail"><p>Your email or password is incorrect</p></div>
+        break;
+      case true:
+        return <div id="loginSuccess"><p>Logging you in...</p></div>
+      default:
+        return <div></div>
+        break;
+  
+    }
+  };
 
   const submitHandler = async (e, props) => {
     e.preventDefault();
@@ -43,7 +55,10 @@ const Login = (props) => {
       .then((data) => [
         (profile.accessToken = data.accessToken),
         (profile.userID = data.userID),
+        (setLoginSuccess(data.success))
       ]);
+
+    await loginSuccessChecker();
 
     props.login(profile);
 
@@ -102,6 +117,7 @@ const Login = (props) => {
             }}
             value={localPass}
           />
+          {loginSuccessChecker()}
           <Link to="/reset" id="resetLink">
             Forgot your password?
           </Link>
@@ -110,7 +126,7 @@ const Login = (props) => {
         <button type="submit" id="submitLogin">
           <b>Login</b>
         </button>
-        <button onClick={() => console.log(props.profile)}>
+        <button >
           console.log state
         </button>
       </form>
