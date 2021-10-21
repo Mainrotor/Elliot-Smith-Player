@@ -7,7 +7,7 @@ const mapStateToProps = () => {
   return {
     playlists: state.playlists,
     likedSongs: state.likedSongs,
-    profile: state,
+    profile: state.profile,
   };
 };
 

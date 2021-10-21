@@ -5,7 +5,7 @@ import { getPlaylists } from "../redux/actions.js";
 
 const mapStateToProps = (state) => {
   return {
-    profile: state,
+    profile: state.profile,
   };
 };
 
