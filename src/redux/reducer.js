@@ -3,9 +3,8 @@ import { combineReducers } from "redux";
 const profile = (state = [], action) => {
   switch (action.type) {
     case "LOGIN":
-      console.log(state);
-      let copy = { ...state };
-      copy = { ...action.value };
+      let copy = { ...state, ...action.value };
+      console.log(copy);
       return copy;
       break;
     case "LOGOUT":

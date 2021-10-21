@@ -27,11 +27,11 @@ const Login = (props) => {
       default:
         return <div></div>
         break;
-  
     }
   };
 
   const submitHandler = async (e, props) => {
+    console.log('im being run')
     e.preventDefault();
     let profile = {
       email: localEmail,
@@ -55,12 +55,13 @@ const Login = (props) => {
       .then((data) => [
         (profile.accessToken = data.accessToken),
         (profile.userID = data.userID),
-        (setLoginSuccess(data.success))
+        (setLoginSuccess(data.success)),
+        (props.login(profile))
       ]);
 
     await loginSuccessChecker();
 
-    props.login(profile);
+    
 
     // const getOptions = {
     //   method: "GET",
@@ -126,10 +127,10 @@ const Login = (props) => {
         <button type="submit" id="submitLogin">
           <b>Login</b>
         </button>
-        <button >
+      </form>
+      <button onClick={()=>{console.log(props.profile)}}>
           console.log state
         </button>
-      </form>
     </div>
   );
 };
