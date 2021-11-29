@@ -7,13 +7,15 @@ import { Provider } from "react-redux";
 import { Route } from "react-router";
 import Navigation from "./containers/Navigation.js";
 import Header from "./containers/Header.js";
-import Footer from "./components/Footer.js";
+import Footer from "./containers/Footer.js";
 
-import CreateAccount from "./components/CreateAccount.js";
+import CreateAccount from "./containers/CreateAccount.js";
 import Router from "./Router.js";
 import store from "./redux/store.js";
 import App from "./containers/App.js";
 import Login from "./containers/Login.js";
+import Status from "./containers/Status.js";
+import DeletePlaylist from "./containers/DeletePlaylist";
 
 import reportWebVitals from "./reportWebVitals";
 
@@ -23,8 +25,10 @@ const Main = () => {
       <BrowserRouter id="pageWrap">
         <Route path="/login" component={Login} />
         <Route path="/CreateAccount" component={CreateAccount} />
+        <Status />
         <div>
           <section id="mainWrap">
+            <DeletePlaylist />
             <Navigation />
             <div id="headerBodyCont">
               <Header />

@@ -5,7 +5,7 @@ const Header = (props) => {
   const checkLogIn = (props) => {
     if (props.loggedIn) {
       return (
-        <button>
+        <button id="logOutButton">
           <Link onClick={() => props.logout()}>Logout</Link>
         </button>
       );
@@ -25,14 +25,7 @@ const Header = (props) => {
 
   return (
     <header id="header">
-      <div id="leftHead">
-        <div>
-          <h1>back</h1>
-        </div>
-        <div>
-          <h1>forward</h1>
-        </div>
-      </div>
+      <div id="leftHead"></div>
       <div id="rightHead">{checkLogIn(props)}</div>
     </header>
   );

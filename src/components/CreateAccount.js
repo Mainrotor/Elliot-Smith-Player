@@ -3,7 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import { Redirect } from "react-router";
 import axios from "axios";
 
-const CreateAccount = () => {
+const CreateAccount = (props) => {
   const [isValid, setIsValid] = useState(null);
   const [serverResponse, setServerResponse] = useState({});
 
@@ -34,7 +34,7 @@ const CreateAccount = () => {
     };
     fetch("https://reach-server.vercel.app/users/signUp", requestOptions)
       .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then((data) => props.setServerResponse(data.success));
   };
 
   const submitHandler = (e) => {
