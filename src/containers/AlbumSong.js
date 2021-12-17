@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import PlaylistSong from "../components/PlaylistSong.js";
+import AlbumSong from "../components/AlbumSong.js";
 import { likeSong } from "../redux/actions.js";
 import { playSong } from "../redux/actions.js";
 import { pushAutoQueue } from "../redux/actions.js";
@@ -45,8 +45,8 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  PlaylistSong,
-  playSong,
+  AlbumSong,
   pushAutoQueue,
+  playSong,
   resetAutoQueue
 );

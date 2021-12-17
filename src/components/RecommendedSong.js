@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Heart from "../media/Heart.svg";
 import HeartEmpty from "../media/HeartEmpty.svg";
 import {
@@ -14,10 +14,12 @@ const checkLiked = (props) => {
   else return HeartEmpty;
 };
 
-const Song = (props) => {
+const RecommendedSong = (props) => {
   const [hoverState, setHoverState] = useState(false);
-
   const [albumArtPath, setAlbumArtPath] = useState("");
+  const [imgLoaded, setImgLoaded] = useState(false);
+
+  const songRow = useRef();
 
   useEffect(() => {
     let songRow = document.getElementById(`song${props.song.song_id}`);
@@ -51,7 +53,7 @@ const Song = (props) => {
     if (albumArtPath) {
       return (
         <img
-          className="songImg"
+          className="recommendedSongImg"
           src={albumArtPath}
           style={
             hoverState ? { backgroundColor: "##e0e0e0", opacity: "70%" } : {}
@@ -92,7 +94,7 @@ const Song = (props) => {
           }
         >
           <IoPlaySharp
-            className="playButtonSongRow"
+            className="recommendedPlayButtonSongRow"
             style={{ opacity: "100%" }}
           />
         </div>
@@ -102,7 +104,7 @@ const Song = (props) => {
 
   return (
     <div
-      className="songRow"
+      className="recommendedSongRow"
       id={`song${props.song.song_id}`}
       albumid={props.song.albumID}
       style={checkClicked()}
@@ -111,27 +113,21 @@ const Song = (props) => {
       songtitle={props.song.song_name}
       tracklength={props.song.track_length}
       artistname={"Elliot Smith"}
+      ref={songRow}
     >
-      <div className="songRowLeft">
-        <div className="songImgCol">
+      <div className="recommendedSongRowTop">
+        <div className="recommendedSongImgCol">
           {checkHovered()}
           {checkImg()}
         </div>
-
-        <div className="songInfoCol">
+      </div>
+      <div className="recommendedSongRowBottom">
+        <div className="recommendedSongInfoCol">
           <h1>{props.song.song_name}</h1>
           <p>Elliot Smith</p>
         </div>
-      </div>
-      <div className="likeSongCol">
-        {/* <IoHeartOutline
-          id="likeSong"
-          src={checkLiked(props)}
-          onClick={(props) => {
-            handleLikeSong(props);
-          }}
-        ></IoHeartOutline> */}
         <IoEllipsisVertical
+          id="recommendedVisibleContextMenu"
           className="visibleContextMenu"
           style={{
             width: "30px",
@@ -145,4 +141,4 @@ const Song = (props) => {
   );
 };
 
-export default Song;
+export default RecommendedSong;

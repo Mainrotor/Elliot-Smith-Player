@@ -12,6 +12,7 @@ import Footer from "./containers/Footer.js";
 import CreateAccount from "./containers/CreateAccount.js";
 import Router from "./Router.js";
 import store from "./redux/store.js";
+import { saveState } from "./localStorage";
 import App from "./containers/App.js";
 import Login from "./containers/Login.js";
 import Status from "./containers/Status.js";
@@ -20,6 +21,16 @@ import DeletePlaylist from "./containers/DeletePlaylist";
 import reportWebVitals from "./reportWebVitals";
 
 const Main = () => {
+  store.subscribe(() => {
+    saveState({
+      /* example state */
+      profile: store.getState().profile,
+      currentSong: store.getState().currentSong,
+      songHistory: store.getState().songHistory,
+      playlists: store.getState().playlists,
+    });
+  });
+
   return (
     <Provider store={store}>
       <BrowserRouter id="pageWrap">

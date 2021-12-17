@@ -23,7 +23,7 @@ const NavLink = (props) => {
 
     let payload = {
       userID: props.profile.userID,
-      playlistID: props.playlistID,
+      playlistID: props.playlistid,
       title: newTitle,
     };
 
@@ -44,7 +44,7 @@ const NavLink = (props) => {
       .then((response) => response.json())
       .then((data) => {
         if (data.success === "Playlist renamed") {
-          props.renamePlaylist(props.playlistID, newTitle);
+          props.renamePlaylist(props.playlistid, newTitle);
           setNewTitle("");
           props.setRename(false);
         }
@@ -57,7 +57,7 @@ const NavLink = (props) => {
 
   const checkStatus = () => {
     if (
-      parseInt(props.renameID) === parseInt(props.playlistID) &&
+      parseInt(props.renameid) === parseInt(props.playlistid) &&
       props.rename
     ) {
       return (
@@ -75,12 +75,12 @@ const NavLink = (props) => {
       return (
         <li>
           <Link
-            to={`/Playlist/${props.playlistID}/${props.userID}`}
+            to={`/Playlist/${props.playlistid}/${props.userid}`}
             className="playlistLink"
-            playlistID={props.playlistID}
+            playlistid={props.playlistid}
             title={props.title}
             style={
-              props.showMenu ? props.checkClickedFunction(props.playlistID) : {}
+              props.showMenu ? props.checkClickedFunction(props.playlistid) : {}
             }
           >
             {props.title}

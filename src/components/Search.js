@@ -6,7 +6,7 @@ import Status from "../components/Status.js";
 import useRightClick from "../hooks/useRightClick";
 
 const Search = (props) => {
-  const { x, y, showMenu, songID, whichMenu, song } = useRightClick();
+  const { x, y, showMenu, songID, whichMenu, song, albumID } = useRightClick();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
@@ -25,6 +25,7 @@ const Search = (props) => {
           updateHook={updateHook}
           type={whichMenu}
           song={song}
+          albumID={albumID}
         />
       );
     }
@@ -33,14 +34,33 @@ const Search = (props) => {
   const searchAPI = (query) => {
     fetch(`https://reach-server-mainrotor.vercel.app/song/${query}`)
       .then((response) => response.json())
-      .then((data) => setSearchResults(data));
+      .then((data) => {
+        console.log(data);
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].song_name.toLowerCase().includes(query.toLowerCase())) {
+            console.log(data[i]);
+            let match = data.splice(i, 1);
+            data.unshift(match[0]);
+            console.log(data);
+            setSearchResults(data);
+          }
+        }
+      });
   };
+
+  useEffect(() => {
+    if (searchQuery.length > 1) {
+      searchAPI(searchQuery);
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchQuery]);
 
   const handleQueryChange = (e) => {
     setSearchQuery(e.target.value);
-    if (searchQuery.length > 1) {
-      searchAPI(searchQuery);
-    }
+    // if (e.target.value.length > 1) {
+    //   searchAPI(searchQuery);
+    // }
   };
 
   return (

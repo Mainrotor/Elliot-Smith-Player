@@ -9,13 +9,9 @@ const Footer = (props) => {
   useEffect(() => {
     if (props.currentSong.songtitle) {
       setSongName(props.currentSong.songtitle);
-    } else {
-      setSongName("");
     }
     if (props.currentSong.artistname) {
       setArtistName(props.currentSong.artistname);
-    } else {
-      setArtistName("");
     }
   }, [props.currentSong]);
 

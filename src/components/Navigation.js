@@ -1,9 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ContextMenu from "../containers/ContextMenu.js";
+import { ReactComponent as ElliotSmithLogo } from "../media/elliot_smith_logo.svg";
 import useRightClick from "../hooks/useRightClick";
 import Playlist from "./Playlist.js";
 import NavLink from "../containers/NavLink.js";
+import { IoSearch, IoHomeSharp, IoAddCircleOutline } from "react-icons/io5";
 
 const Navigation = (props) => {
   const [playlistLen, setPlaylistLen] = useState(1);
@@ -11,6 +13,8 @@ const Navigation = (props) => {
   const { x, y, showMenu, songID, playlistID, songTitle, renameID, whichMenu } =
     useRightClick();
   const [albumArtPath, setAlbumArtPath] = useState("");
+
+  const history = useHistory();
 
   const updateHook = (data) => {
     props.setServerResponse(data.success);
@@ -102,19 +106,28 @@ const Navigation = (props) => {
     <section id="navContainer">
       {checkContextMenu()}
       <div id="navLists">
-        <h2>Elliot Smith Player</h2>
+        <div id="logoContainer">
+          <ElliotSmithLogo
+            id="elliotSmithLogo"
+            onClick={() => history.push("/Home")}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
         <ul id="nav">
           <li>
             <Link to="/Home" className="navLinks">
+              <IoHomeSharp className="navSymbols" />
               Home
             </Link>
           </li>
           <li>
             <Link to="/Search" className="navLinks">
+              <IoSearch className="navSymbols" />
               Search
             </Link>
           </li>
           <li onClick={createPlaylist} className="navLinks">
+            <IoAddCircleOutline className="navSymbols" />
             Create Playlist
           </li>
         </ul>
@@ -125,12 +138,12 @@ const Navigation = (props) => {
                 showMenu={showMenu}
                 key={props.playlists.indexOf(listing)}
                 checkClickedFunction={checkClicked}
-                renameID={renameID}
+                renameid={renameID}
                 rename={rename}
                 setRename={setRename}
-                playlistID={listing.playlistID}
+                playlistid={listing.playlistID}
                 title={listing.title}
-                userID={props.profile.userID}
+                userid={props.profile.userID}
               />
             );
           })}

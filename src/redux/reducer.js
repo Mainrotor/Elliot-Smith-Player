@@ -105,7 +105,6 @@ const currentSong = (state = [], action) => {
     case "PLAY_SONG":
       let stateCopy = { state };
       stateCopy = action.value;
-      console.log(stateCopy);
       return stateCopy;
       break;
     case "MARK_PLAYED":
@@ -121,16 +120,45 @@ const currentSong = (state = [], action) => {
 const songQueue = (state = [], action) => {
   switch (action.type) {
     case "ADD_QUEUE":
-      let copy = { state };
-      copy = action.value;
+      let copy = state;
+      copy = [action.value];
       return copy;
       break;
     case "RESET_QUEUE": {
-      let stateCopy = { state };
-      stateCopy = {};
+      let stateCopy = state;
+      stateCopy = [];
+      console.log(stateCopy);
       return stateCopy;
       break;
     }
+    default:
+      return state;
+  }
+};
+
+const autoQueue = (state = [], action) => {
+  switch (action.type) {
+    case "PUSH_QUEUE":
+      let copy = state;
+      copy = action.value;
+      return copy;
+      break;
+    case "DELETE_FROM_QUEUE":
+      let queueCopy = [...state];
+      let newArray = [];
+      console.log(queueCopy);
+      queueCopy.forEach((row) => {
+        if (row.playlistID) {
+          if (row.orderID != action.value.orderID) {
+            newArray.push(row);
+          }
+        } else if (row.tracknum) {
+          if (row.tracknum != action.value.tracknum) {
+            newArray.push(row);
+          }
+        }
+      });
+      return newArray;
     default:
       return state;
   }
@@ -147,4 +175,5 @@ export default combineReducers({
   deletePlaylist,
   currentSong,
   songQueue,
+  autoQueue,
 });

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { ReactComponent as ElliotSmithLogo } from "../media/elliot_smith_logo_large.svg";
 import { Redirect } from "react-router";
-import Status from '../components/Status.js';
+import Status from "../components/Status.js";
 
 const Login = (props) => {
   const history = useHistory();
 
   const [localEmail, setLocalEmail] = useState("");
   const [localPass, setLocalPass] = useState("");
+  const [serverResponse, setServerResponse] = useState("default");
 
   const handleEmailChange = (e) => {
     setLocalEmail(e.target.value);
@@ -15,6 +17,35 @@ const Login = (props) => {
 
   const handlePassChange = (e) => {
     setLocalPass(e.target.value);
+  };
+
+  const checkError = () => {
+    switch (serverResponse) {
+      case "login-failed":
+        console.log("am i working");
+        return (
+          <div id="invalidPassBox">
+            <p>Invalid password</p>
+          </div>
+        );
+        break;
+      case "email-not-found":
+        return (
+          <div id="emailNotFoundBox">
+            <p>Email not found</p>
+          </div>
+        );
+      default:
+        return <div></div>;
+    }
+  };
+
+  const redBorder = () => {
+    if (serverResponse === "default") {
+      return { border: "0px" };
+    } else {
+      return { border: "2px solid #e35335" };
+    }
   };
 
   const submitHandler = async (e, props) => {
@@ -38,12 +69,17 @@ const Login = (props) => {
 
     await fetch("https://reach-server.vercel.app/users/login", requestOptions)
       .then((response) => response.json())
-      .then((data) => [
-        (profile.accessToken = data.accessToken),
-        (profile.userID = data.userID),
-        (props.setServerResponse(data.success)),
-        (props.login(profile))
-      ]);
+      .then((data) => {
+        profile.accessToken = data.accessToken;
+        profile.userID = data.userID;
+        setServerResponse(data.success);
+        if (data.success === "login-success") {
+          props.login(profile);
+          props.setServerResponse(data.success);
+          setLocalEmail("");
+          setLocalPass("");
+        }
+      });
 
     const getOptions = {
       method: "GET",
@@ -52,31 +88,33 @@ const Login = (props) => {
         Accept: "*/*",
       },
     };
-    console.log(props.profile)
-    await fetch(`https://reach-server.vercel.app/playlists/getPlaylists/${profile.userID}`, getOptions)
+    await fetch(
+      `https://reach-server.vercel.app/playlists/getPlaylists/${profile.userID}`,
+      getOptions
+    )
       .then((response) => response.json())
-      .then((data) => profile.playlists = data);
+      .then((data) => (profile.playlists = data));
 
     await props.getPlaylists(profile.playlists);
-
-    setLocalEmail("");
-    setLocalPass("");
   };
 
   return (
     <div id="loginContainer">
       <Link to="/Home" id="homeLink">
-        Elliot Smith Player
+        <ElliotSmithLogo
+          id="homeLogoCreatAccount"
+          style={{ width: "350px", height: "70px" }}
+        />
       </Link>
-      <form id="loginForm"
+      <form
+        id="loginForm"
         onSubmit={(e) => {
           submitHandler(e, props);
         }}
       >
+        {checkError()}
         <div id="loginInputsContainer">
-          <label htmlFor="email">
-            <b>Enter Email</b>
-          </label>
+          <label htmlFor="email">Enter Email</label>
           <input
             type="email"
             placeholder="Email"
@@ -84,12 +122,11 @@ const Login = (props) => {
             onChange={(e) => {
               handleEmailChange(e);
             }}
+            style={redBorder()}
             value={localEmail}
           />
 
-          <label htmlFor="pass">
-            <b>Enter Password</b>
-          </label>
+          <label htmlFor="pass">Enter Password</label>
           <input
             type="password"
             placeholder="Password"
@@ -98,6 +135,7 @@ const Login = (props) => {
               handlePassChange(e);
             }}
             value={localPass}
+            style={redBorder()}
           />
           <Link to="/reset" id="resetLink">
             Forgot your password?
@@ -105,7 +143,7 @@ const Login = (props) => {
         </div>
 
         <button type="submit" id="submitLogin">
-          <b>Login</b>
+          Login
         </button>
       </form>
     </div>

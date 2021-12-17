@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { IoPlaySharp, IoEllipsisVertical } from "react-icons/io5";
 
-const PlaylistSong = (props) => {
+const AlbumSong = (props) => {
   const [hoverState, setHoverState] = useState(false);
   const [albumArtPath, setAlbumArtPath] = useState("");
   const [length, setLength] = useState("0:00");
 
-  let songLength = props.song.track_length;
-  let minutes = Math.floor(songLength / 60);
-  let seconds = songLength - minutes * 60;
-
   useEffect(() => {
-    let songRow = document.getElementById(`song${props.song.orderID}`);
+    let songRow = document.getElementById(`song${props.song.songID}`);
     songRow.addEventListener("mouseenter", () => {
       setHoverState(true);
     });
@@ -28,55 +24,38 @@ const PlaylistSong = (props) => {
     };
   });
 
-  useEffect(() => {
-    if (props.song.album_art_path) {
-      async function importFile() {
-        const file = await import(`../media/${props.song.album_art_path}.jpg`);
-        setAlbumArtPath(file.default);
-      }
-      importFile();
-    }
-  }, [props.song.album_art_path]);
-
-  const checkImg = () => {
-    if (albumArtPath) {
-      return (
-        <img src={albumArtPath} style={{ width: "60px", height: "60px" }}></img>
-      );
-    }
-  };
-
   const checkHovered = () => {
     if (
       hoverState ||
-      parseInt(props.clickedOrderID) === parseInt(props.song.orderID)
+      parseInt(props.clickedSongID) === parseInt(props.song.songID)
     ) {
       return (
         <div
           className="playButtonContPlaylistSongRow"
           onClick={() => {
             props.playSong(
-              props.song.song_id,
+              props.song.songID,
               props.song.path,
-              props.song.album_art_path,
-              props.song.song_name,
+              props.albumArtPath,
+              props.song.songName,
               props.song.track_length,
               "Elliot Smith",
-              props.playlistid,
-              props.song.orderID
+              null,
+              props.albumid
             );
-            filterSongs(props.playlistSongs);
+            filterSongs(props.albumSongs);
           }}
         >
           <IoPlaySharp className="playButtonPlaylistSongRow" />
         </div>
       );
     } else return props.index + 1;
+    setHoverState(false);
   };
 
   const checkClicked = () => {
     if (props.showMenu) {
-      if (parseInt(props.clickedOrderID) === parseInt(props.song.orderID)) {
+      if (parseInt(props.clickedSongID) === parseInt(props.song.songID)) {
         return {
           backgroundColor: "#0c1736",
         };
@@ -88,12 +67,6 @@ const PlaylistSong = (props) => {
     }
   };
 
-  useEffect(() => {
-    if (props.song.track_length) {
-      setLength(timeConverter(props.song.track_length));
-    }
-  }, [props.song?.track_length]);
-
   const timeConverter = (seconds) => {
     let time = new Date(seconds * 1000).toISOString().substr(14, 5);
     time = time.split("");
@@ -104,20 +77,26 @@ const PlaylistSong = (props) => {
     return time;
   };
 
+  useEffect(() => {
+    if (props.song.trackLength) {
+      setLength(timeConverter(props.song.trackLength));
+    }
+  }, [props.song?.trackLength]);
+
+  /*remove current song and push rest of album songs to autoQueue*/
   const filterSongs = (songs) => {
     props.resetAutoQueue();
     let temp = [];
     songs.forEach((song) => {
-      if (song.orderID != props.song.orderID) {
+      if (song.trackNum != props.song.trackNum) {
         let line = {
-          albumID: song.albumID,
-          albumartpath: song.album_art_path,
-          orderID: song.orderID,
+          albumID: props.albumID,
+          albumartpath: props.albumArtPath,
           songpath: song.path,
-          playlistID: song.playlistID,
-          songID: song.song_ID,
-          songtitle: song.song_name,
-          tracklength: song.track_length,
+          songID: song.songID,
+          songtitle: song.songName,
+          tracklength: song.trackLength,
+          tracknum: song.trackNum,
           artistname: "Elliot Smith",
         };
         temp.push(line);
@@ -128,33 +107,31 @@ const PlaylistSong = (props) => {
 
   return (
     <div
-      className="playlistSongRow"
-      id={`song${props.song.orderID}`}
+      className="albumSongRow"
+      id={`song${props.song.songID}`}
       style={checkClicked()}
-      songid={props.song.song_ID}
-      orderid={props.song.orderID}
-      albumid={props.song.albumID}
+      songid={props.song.songID}
+      orderid={props.song.trackNum}
       song={props.song}
       songpath={props.song.path}
-      albumartpath={props.song.album_art_path}
-      songtitle={props.song.song_name}
-      tracklength={props.song.track_length}
-      playlistid={props.song.playlistID}
+      albumartpath={props.albumArtPath}
+      songtitle={props.song.songName}
+      tracklength={props.song.trackLength}
       artistname={"Elliot Smith"}
+      tracknum={props.song.trackNum}
     >
-      <div className="playlistSongNum">{checkHovered()}</div>
-      <div className="playlistSongTitleCol">
-        <div className="playlistSongImg">{checkImg()}</div>
-        <div className="playlistSongTitleText">
-          <div className="playlistSongTitle">
-            <p>{props.song.song_name}</p>
+      <div className="albumSongNum">{checkHovered()}</div>
+      <div className="albumSongTitleCol">
+        <div className="albumSongTitleText">
+          <div className="albumSongTitle">
+            <p>{props.song.songName}</p>
           </div>
-          <div className="playlistSongRowArtistName">
+          <div className="albumSongRowArtistName">
             <p>Elliot Smith</p>
           </div>
         </div>
       </div>
-      <div className="playlistSongLength">{length}</div>
+      <div className="albumSongLength">{length}</div>
       <IoEllipsisVertical
         className="visibleContextMenu"
         style={{
@@ -168,4 +145,4 @@ const PlaylistSong = (props) => {
   );
 };
 
-export default PlaylistSong;
+export default AlbumSong;

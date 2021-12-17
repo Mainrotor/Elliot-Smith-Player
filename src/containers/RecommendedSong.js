@@ -1,9 +1,6 @@
 import { connect } from "react-redux";
-import PlaylistSong from "../components/PlaylistSong.js";
-import { likeSong } from "../redux/actions.js";
+import RecommendedSong from "../components/RecommendedSong.js";
 import { playSong } from "../redux/actions.js";
-import { pushAutoQueue } from "../redux/actions.js";
-import { resetAutoQueue } from "../redux/actions.js";
 
 const mapStateToProps = (state) => {
   return {
@@ -13,11 +10,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    likeSong: (songID) => {
-      dispatch(likeSong(songID));
-    },
-    pushAutoQueue: (songs) => dispatch(pushAutoQueue(songs)),
-    resetAutoQueue: (songs) => dispatch(resetAutoQueue(songs)),
     playSong: (
       songID,
       songpath,
@@ -45,8 +37,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  PlaylistSong,
-  playSong,
-  pushAutoQueue,
-  resetAutoQueue
+  RecommendedSong,
+  playSong
 );

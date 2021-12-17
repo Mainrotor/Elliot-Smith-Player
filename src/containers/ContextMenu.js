@@ -5,12 +5,15 @@ import { confirmDelete } from "../redux/actions.js";
 import { playSong } from "../redux/actions.js";
 import { addToQueue } from "../redux/actions.js";
 import { resetQueue } from "../redux/actions.js";
+import { pushAutoQueue } from "../redux/actions.js";
+import { resetAutoQueue } from "../redux/actions.js";
 import state from "../redux/state.js";
 
 const mapStateToProps = (state) => {
   return {
     playlists: state.playlists,
     profile: state.profile,
+    autoQueue: state.autoQueue,
   };
 };
 
@@ -19,6 +22,8 @@ const mapDispatchToProps = (dispatch) => {
     confirmDelete: (playlist, title) =>
       dispatch(confirmDelete(playlist, title)),
     resetDeleteMenu: () => dispatch(resetDeleteMenu()),
+    pushAutoQueue: (songs) => dispatch(pushAutoQueue(songs)),
+    resetAutoQueue: (songs) => dispatch(resetAutoQueue(songs)),
     playSong: (
       songID,
       songpath,
@@ -55,5 +60,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
   playSong,
   addToQueue,
   resetQueue,
-  setServerResponse
+  setServerResponse,
+  pushAutoQueue,
+  resetAutoQueue
 );

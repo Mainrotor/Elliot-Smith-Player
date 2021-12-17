@@ -6,6 +6,7 @@ let state = {
     loggedIn: false,
   },
   songQueue: [],
+  autoQueue: [],
   currentSong: {},
   songHistory: [],
   playlists: [],

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { ReactComponent as ElliotSmithLogo } from "../media/elliot_smith_logo_large.svg";
 import { Redirect } from "react-router";
 import axios from "axios";
 
 const CreateAccount = (props) => {
   const [isValid, setIsValid] = useState(null);
-  const [serverResponse, setServerResponse] = useState({});
-
+  const [serverResponse, setServerResponse] = useState("default");
   const [accountDetails, setAccountDetails] = useState({
     email: "",
     confirmEmail: "",
@@ -34,7 +34,12 @@ const CreateAccount = (props) => {
     };
     fetch("https://reach-server.vercel.app/users/signUp", requestOptions)
       .then((response) => response.json())
-      .then((data) => props.setServerResponse(data.success));
+      .then((data) => {
+        setServerResponse(data.success);
+        if (data.success === "account-created") {
+          props.setServerResponse(data.success);
+        }
+      });
   };
 
   const submitHandler = (e) => {
@@ -42,7 +47,7 @@ const CreateAccount = (props) => {
     if (accountDetails.email === accountDetails.confirmEmail) {
       postAccount(accountDetails);
     } else {
-      console.log("error");
+      setServerResponse("unequal-emails");
     }
   };
 
@@ -51,10 +56,50 @@ const CreateAccount = (props) => {
     }
   };
 
+  const checkError = () => {
+    switch (serverResponse) {
+      case "unknown-error":
+        console.log("am i working");
+        return (
+          <div id="unknownErrorBox">
+            <p>An unknown error occured</p>
+          </div>
+        );
+        break;
+      case "email-in-use":
+        console.log("test");
+        return (
+          <div id="emailInUseBox">
+            <p>This email is already in use</p>
+          </div>
+        );
+      case "unequal-emails":
+        return (
+          <div id="unequalEmailsBox">
+            <p>Your emails are inconsistent</p>
+          </div>
+        );
+        break;
+      default:
+        return <div></div>;
+    }
+  };
+
+  const redBorder = () => {
+    if (serverResponse === "default") {
+      return { border: "0px" };
+    } else {
+      return { border: "2px solid #e35335" };
+    }
+  };
+
   return (
     <div id="createAccContainer">
-      <Link to="/Home" id="homeLink">
-        Elliot Smith Player
+      <Link to="/Home" id="homeLinkCreateAccount">
+        <ElliotSmithLogo
+          id="homeLogoCreatAccount"
+          style={{ width: "350px", height: "70px" }}
+        />
       </Link>
       <h1>Sign up for free to listen.</h1>
       <form
@@ -63,7 +108,7 @@ const CreateAccount = (props) => {
           submitHandler(e);
         }}
       >
-        <label htmlFor="uname">What's your name?</label>
+        <label htmlFor="uname">Create a username</label>
         <input
           type="text"
           placeholder="Create a username"
@@ -82,6 +127,7 @@ const CreateAccount = (props) => {
           onChange={(e) => {
             handleFormChange("email", e);
           }}
+          style={redBorder()}
           value={accountDetails.email}
         />
         <label htmlFor="confirmEmail">Confirm your email</label>
@@ -93,6 +139,7 @@ const CreateAccount = (props) => {
           onChange={(e) => {
             handleFormChange("confirmEmail", e);
           }}
+          style={redBorder()}
           value={accountDetails.confirmEmail}
         />
         <label htmlFor="password">Create a password</label>
@@ -109,6 +156,7 @@ const CreateAccount = (props) => {
         <button type="submit" id="submitSignup">
           Sign up
         </button>
+        {checkError()}
       </form>
     </div>
   );

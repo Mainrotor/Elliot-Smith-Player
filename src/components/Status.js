@@ -4,6 +4,18 @@ const Status = (props) => {
   let history = useHistory();
   const generateStatus = () => {
     switch (props.serverResponse.success) {
+      case "added-queue":
+        setTimeout(() => {
+          props.setServerResponse({});
+        }, 3000);
+        return (
+          <div className="statusContainer">
+            <div id="addedQueuePopup">
+              <p>Added to queue</p>
+            </div>
+          </div>
+        );
+        break;
       case "success":
         console.log("song added");
         setTimeout(() => {
@@ -36,7 +48,7 @@ const Status = (props) => {
           props.setServerResponse({});
         }, 3000);
         return (
-          <div className="statusContainerLow">
+          <div className="statusContainerHigh">
             <div id="accountCreatedPopup">
               <p>Account Created</p>
             </div>
@@ -48,9 +60,21 @@ const Status = (props) => {
           props.setServerResponse({});
         }, 3000);
         return (
-          <div className="statusContainerLow">
+          <div className="statusContainerHigh">
             <div id="emailInUsePopup">
               <p>This email is already in use</p>
+            </div>
+          </div>
+        );
+        break;
+      case "email-not-found":
+        setTimeout(() => {
+          props.setServerResponse({});
+        }, 3000);
+        return (
+          <div className="statusContainerHigh">
+            <div id="emailNotFoundPopup">
+              <p>Account not found</p>
             </div>
           </div>
         );

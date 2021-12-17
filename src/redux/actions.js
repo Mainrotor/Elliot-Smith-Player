@@ -107,7 +107,8 @@ export const playSong = (
   tracklength,
   artistname,
   playlistID,
-  orderID
+  orderID,
+  albumID
 ) => {
   return {
     type: "PLAY_SONG",
@@ -121,6 +122,7 @@ export const playSong = (
       artistname: artistname,
       playlistID: playlistID,
       orderID: orderID,
+      albumID: albumID,
     },
   };
 };
@@ -137,9 +139,28 @@ export const markPlayed = () => {
 export const addToQueue = (song) => {
   return {
     type: "ADD_QUEUE",
-    value: {
-      song,
-    },
+    value: song,
+  };
+};
+
+export const pushAutoQueue = (songs) => {
+  return {
+    type: "PUSH_QUEUE",
+    value: songs,
+  };
+};
+
+export const resetAutoQueue = () => {
+  return {
+    type: "RESET_QUEUE",
+    value: {},
+  };
+};
+
+export const removeFromAutoQueue = (song) => {
+  return {
+    type: "DELETE_FROM_QUEUE",
+    value: song,
   };
 };
 

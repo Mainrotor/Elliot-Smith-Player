@@ -11,8 +11,11 @@ import {
 import useQueueHandler from "../hooks/useQueueHandler";
 
 const AudioPlayer = (props) => {
+  const timeSlider = useRef();
   const [audio, setAudio] = useState();
   const [paused, setPaused] = useState(true);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
   const {
     addSongToQueue,
     songEndedHandler,
@@ -21,10 +24,15 @@ const AudioPlayer = (props) => {
     loadNextSong,
     loadLastSong,
     userQueue,
+    setAutoQueue,
+    shuffleToggle,
+    setShuffleToggle,
+    removeSong,
   } = useQueueHandler();
 
   useEffect(() => {
     if (props.currentSong.songpath) {
+      console.log(props.currentSong);
       if (audio) {
         setAudio((prevState) => {
           let copy = prevState;
@@ -39,13 +47,15 @@ const AudioPlayer = (props) => {
       }
       importFile();
     }
-  }, [props.currentSong.songpath]);
+  }, [props.currentSong]);
 
   useEffect(() => {
-    if (props.songQueue.song) {
-      addSongToQueue(props.songQueue.song);
+    if (props.songQueue.length > 0) {
+      addSongToQueue(props.songQueue);
+      props.setServerResponse("added-queue");
+      props.resetQueue();
     }
-  }, [props.songQueue.song]);
+  }, [props.songQueue]);
 
   useEffect(() => {
     if (audio) {
@@ -56,6 +66,51 @@ const AudioPlayer = (props) => {
     }
   }, [audio]);
 
+  /*listen to global state autoQueue for new autoQueue*/
+
+  useEffect(() => {
+    if (props.autoQueue) {
+      setAutoQueue(props.autoQueue);
+    }
+  }, [props.autoQueue]);
+
+  /* listen if a song needs to be removed from global autoQueue*/
+
+  useEffect(() => {
+    if (removeSong) {
+      props.removeFromAutoQueue(removeSong);
+    }
+  }, [removeSong]);
+
+  /*set duration*/
+
+  /*set current time*/
+  useEffect(() => {
+    if (audio) {
+      audio.addEventListener("timeupdate", () => {
+        setCurrentTime(audio.currentTime);
+      });
+      audio.removeEventListener("timeupdate", () => {
+        setCurrentTime(audio.currentTime);
+      });
+      audio.addEventListener("durationchange", () => {
+        setDuration(audio.duration);
+        timeSlider.current.max = audio.duration;
+      });
+    }
+  }, [audio]);
+
+  const timeConverter = (seconds) => {
+    let time = new Date(seconds * 1000).toISOString().substr(14, 5);
+    time = time.split("");
+    if (time[0] === "0") {
+      time.splice(0, 1);
+    }
+    time.join();
+    return time;
+  };
+
+  /*load new song*/
   useEffect(() => {
     console.log(newCurrentSong);
     if (newCurrentSong) {
@@ -72,6 +127,7 @@ const AudioPlayer = (props) => {
     }
   }, [newCurrentSong]);
 
+  /*listen for if song ended*/
   useEffect(() => {
     if (audio) {
       audio.addEventListener("ended", () => {
@@ -85,7 +141,6 @@ const AudioPlayer = (props) => {
 
   const playSong = () => {
     if (audio) {
-      console.log(audio.currentTime);
       audio.play();
       setPaused(false);
     } else console.log("no song queued");
@@ -108,6 +163,22 @@ const AudioPlayer = (props) => {
     } else loadLastSong();
   };
 
+  const changeSlider = () => {
+    setCurrentTime(timeSlider.current.value);
+    setAudio((prevState) => {
+      let prev = prevState;
+      prevState.currentTime = timeSlider.current.value;
+      return prev;
+    });
+  };
+
+  useEffect(() => {
+    timeSlider.current.style.setProperty(
+      "--seek-before-width",
+      `${(timeSlider.current.value / duration) * 100}%`
+    );
+  });
+
   const checkPaused = () => {
     if (audio) {
       if (paused) {
@@ -117,6 +188,7 @@ const AudioPlayer = (props) => {
             className="playPauseButton"
             color="white"
             alt="Play"
+            style={{ cursor: "pointer" }}
             onClick={() => {
               playSong();
             }}
@@ -129,6 +201,7 @@ const AudioPlayer = (props) => {
             className="playPauseButton"
             color="white"
             alt="Pause"
+            style={{ cursor: "pointer" }}
             onClick={() => {
               pauseSong();
             }}
@@ -144,18 +217,40 @@ const AudioPlayer = (props) => {
       );
   };
 
+  const checkShuffle = () => {
+    if (shuffleToggle) {
+      return (
+        <IoShuffleOutline
+          color="grey"
+          style={{ height: "25px", width: "25px" }}
+          alt="Shuffle"
+          // onClick={() => {
+          //   setShuffleToggle(false);
+          // }}
+        />
+      );
+    } else {
+      return (
+        <IoShuffleOutline
+          color="grey"
+          style={{ height: "25px", width: "25px" }}
+          alt="Shuffle"
+          // onClick={() => {
+          //   setShuffleToggle(true);
+          // }}
+        />
+      );
+    }
+  };
+
   return (
     <div id="audioPlayerModule">
       <div id="topLayerControls">
-        <IoShuffleOutline
-          color="white"
-          style={{ height: "25px", width: "25px" }}
-          alt="Shuffle"
-        />
+        {checkShuffle()}
         <IoPlaySkipBackSharp
           id="skipBackButton"
           color="white"
-          style={{ height: "20px", width: "20px" }}
+          style={{ height: "20px", width: "20px", cursor: "pointer" }}
           alt="Skip Back"
           onClick={() => {
             skipBack();
@@ -165,15 +260,34 @@ const AudioPlayer = (props) => {
         <IoPlaySkipForwardSharp
           id="skipForwardButton"
           color="white"
-          style={{ height: "20px", width: "20px" }}
+          style={{ height: "20px", width: "20px", cursor: "pointer" }}
           alt="Skip Next"
           onClick={() => loadNextSong()}
         />
         <IoRepeatOutline
-          color="white"
+          color="grey"
           style={{ height: "25px", width: "25px" }}
           alt="Replay"
         />
+      </div>
+      <div id="bottomLayerControls">
+        <div id="timeSliderCont">
+          <div id="currentTime">
+            <p>{timeConverter(currentTime)}</p>
+          </div>
+          <input
+            type="range"
+            id="timeSlider"
+            defaultValue="0"
+            ref={timeSlider}
+            onChange={() => changeSlider()}
+            value={currentTime}
+            style={{ cursor: "pointer" }}
+          ></input>
+          <div id="duration">
+            <p>{timeConverter(duration)}</p>
+          </div>
+        </div>
       </div>
     </div>
   );

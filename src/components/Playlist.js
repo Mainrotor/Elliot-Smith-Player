@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import PlaylistSong from "../containers/PlaylistSong.js";
 import ContextMenu from "../containers/ContextMenu.js";
 import useRightClick from "../hooks/useRightClick";
+import { IoTimeOutline } from "react-icons/io5";
 
 const Playlist = (props) => {
   const [songs, setSongs] = useState([]);
@@ -10,7 +11,8 @@ const Playlist = (props) => {
   const [totalMinutes, setTotalMinutes] = useState(0);
   const [totalSeconds, setTotalSeconds] = useState(0);
   const [playlist, setPlaylist] = useState({});
-  const { x, y, showMenu, songID, whichMenu, clickedOrderID } = useRightClick();
+  const { x, y, showMenu, songID, whichMenu, clickedOrderID, albumID, song } =
+    useRightClick();
 
   const checkContextMenu = () => {
     if (whichMenu === "playlist-song") {
@@ -23,6 +25,9 @@ const Playlist = (props) => {
           orderID={clickedOrderID}
           showMenu={showMenu}
           songID={songID}
+          albumID={albumID}
+          song={song}
+          playlistSongs={songs}
           playlistID={props.match.params.id}
           userID={props.profile.userID}
           updateHook={updateHook}
@@ -78,23 +83,59 @@ const Playlist = (props) => {
     props.setServerResponse(data.success);
   };
 
-  let totalTimeCounter = () => {
-    let totalSecondsLocal = 0;
-    let totalMinutesLocal = 0;
-    let totalHoursLocal = 0;
-    songs.forEach((song) => {
-      return (totalSecondsLocal += song.track_length);
-    });
-    setTotalSeconds(totalSecondsLocal);
-    console.log(
-      totalHoursLocal +
-        " hours " +
-        totalMinutesLocal +
-        " minutes " +
-        totalSecondsLocal +
-        " seconds"
-    );
-  };
+  useEffect(() => {
+    if (songs) {
+      let totalSecondsLocal = 0;
+      let totalMinutesLocal = 0;
+      let totalHoursLocal = 0;
+      songs.forEach((song) => {
+        totalSecondsLocal += song.track_length;
+      });
+      if (totalSecondsLocal < 3600) {
+        setTotalHours(0);
+        let time = new Date(totalSecondsLocal * 1000)
+          .toISOString()
+          .substr(14, 5);
+        time = time.split(":");
+        totalSecondsLocal = time[1].split("");
+        totalMinutesLocal = time[0].split("");
+        if (totalSecondsLocal[0] === "0") {
+          totalSecondsLocal.splice(0, 1);
+        }
+        if (totalMinutesLocal[0] === "0") {
+          totalMinutesLocal.splice(0, 1);
+        }
+        totalMinutesLocal = totalMinutesLocal.join("");
+        totalSecondsLocal = totalSecondsLocal.join("");
+        setTotalMinutes(totalMinutesLocal);
+        setTotalSeconds(totalSecondsLocal);
+      } else if (totalSecondsLocal > 3600) {
+        let time = new Date(totalSecondsLocal * 1000)
+          .toISOString()
+          .substr(11, 8);
+        time = time.split(":");
+        totalSecondsLocal = time[2].split("");
+        totalMinutesLocal = time[1].split("");
+        totalHoursLocal = time[0].split("");
+        if (totalSecondsLocal[0] === "0") {
+          totalSecondsLocal.splice(0, 1);
+        }
+        if (totalMinutesLocal[0] === "0") {
+          totalMinutesLocal.splice(0, 1);
+        }
+        if (totalHoursLocal[0] === "0") {
+          totalHoursLocal.splice(0, 1);
+        }
+        totalMinutesLocal = totalMinutesLocal.join("");
+        totalSecondsLocal = totalSecondsLocal.join("");
+        totalHoursLocal = totalHoursLocal.join("");
+        console.log(totalHoursLocal);
+        setTotalMinutes(totalMinutesLocal);
+        setTotalSeconds(totalSecondsLocal);
+        setTotalHours(totalHoursLocal);
+      }
+    }
+  }, [songs]);
 
   useEffect(() => {
     if (
@@ -104,8 +145,7 @@ const Playlist = (props) => {
     ) {
       setPlaylist(
         props.playlists.find(
-          (playlist) => playlist.playlistID == parseInt(props.match.params.id),
-          console.log(playlist)
+          (playlist) => playlist.playlistID == parseInt(props.match.params.id)
         )
       );
     } else {
@@ -121,10 +161,10 @@ const Playlist = (props) => {
         getOptions
       )
         .then((response) => response.json())
-        .then((data) => [
-          setPlaylist({ username: data[0].username, title: data[0].title }),
-          console.log(data),
-        ]);
+        .then((data) => {
+          setPlaylist({ username: data[0].username, title: data[0].title });
+          console.log(data);
+        });
     }
 
     const getOptions = {
@@ -139,7 +179,9 @@ const Playlist = (props) => {
       getOptions
     )
       .then((response) => response.json())
-      .then((data) => setSongs(data));
+      .then((data) => {
+        setSongs(data);
+      });
   }, [props.match.params.id]);
 
   return (
@@ -155,8 +197,13 @@ const Playlist = (props) => {
             <h1 id="playlistTitle">{playlist.title}</h1>
             <div id="playlistInfo">
               <p>
-                {playlist.username} &#8226; {songs.length} songs, {totalHours}{" "}
-                hours {totalMinutes} minutes {totalSeconds} seconds
+                {playlist.username} &#8226; {songs.length} songs,{" "}
+                {() => {
+                  if (totalHours > 0) {
+                    return `${totalHours} hours`;
+                  }
+                }}{" "}
+                {totalMinutes} minutes {totalSeconds} seconds
               </p>
             </div>
           </div>
@@ -166,9 +213,7 @@ const Playlist = (props) => {
             <div id="playlistTableHead">
               <div id="songOrderCol">#</div>
               <div>TITLE</div>
-              <div>ALBUM</div>
-              <div>DATE ADDED</div>
-              <div>length</div>
+              <div>LENGTH</div>
             </div>
             <div id="playlistTableBody">
               {songs.map((song) => {
@@ -181,6 +226,8 @@ const Playlist = (props) => {
                     totalMinutes={totalMinutes}
                     setTotalMinutes={setTotalMinutes}
                     showMenu={showMenu}
+                    playlistid={props.match.params.id}
+                    playlistSongs={songs}
                   />
                 );
               })}
