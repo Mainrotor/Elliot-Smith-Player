@@ -1,0 +1,21 @@
+[debug] [2022-04-26T15:40:17.452Z] ----------------------------------------------------------------------
+[debug] [2022-04-26T15:40:17.455Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Jason\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2022-04-26T15:40:17.456Z] CLI Version:   10.7.1
+[debug] [2022-04-26T15:40:17.456Z] Platform:      win32
+[debug] [2022-04-26T15:40:17.456Z] Node Version:  v14.16.1
+[debug] [2022-04-26T15:40:17.458Z] Time:          Tue Apr 26 2022 10:40:17 GMT-0500 (Central Daylight Time)
+[debug] [2022-04-26T15:40:17.458Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-04-26T15:40:17.470Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-04-26T15:40:17.470Z] > authorizing via signed-in user (raj.cornish5@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\Jason\Documents\Capstone backup\reach
+

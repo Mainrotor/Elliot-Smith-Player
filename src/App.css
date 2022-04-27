@@ -145,6 +145,13 @@
 
 /*Footer Play Bar Component*/
 
+#wideFooter {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
 footer {
   position: fixed;
   display: flex;
@@ -169,11 +176,17 @@ footer section {
   box-sizing: border-box;
 }
 
+#loadedSongInfo div {
+  width: 100%;
+  height: 100%;
+}
+
 #loadedSongTitle {
   color: #f5f5f5;
   font-size: 18px;
   margin: 0px;
   font-weight: normal;
+  position: relative;
 }
 
 #loadedArtistName {
@@ -199,14 +212,12 @@ footer section p {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .playPauseButton {
   margin-right: 15px;
   margin-left: 15px;
-  width: 40px;
-  height: 40px;
 }
 
 /* .playPauseButton:hover {
@@ -226,10 +237,15 @@ footer section p {
 #timeSliderCont {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   align-items: center;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  margin: auto;
 }
 
-#timeSlider::before {
+#wideTimeSlider::before {
   content: "";
   height: 5px;
   width: var(--seek-before-width);
@@ -241,8 +257,8 @@ footer section p {
   background: #737373;
 }
 
-#timeSlider {
-  width: 500px;
+#wideTimeSlider {
+  width: 50%;
   height: 5px;
   appearance: none;
   background: #f5f5f5;
@@ -254,7 +270,7 @@ footer section p {
   box-sizing: border-box;
 }
 
-#timeSlider::-webkit-slider-thumb {
+#wideTimeSlider::-webkit-slider-thumb {
   -webkit-appearance: none;
   height: 15px;
   width: 15px;
@@ -266,7 +282,7 @@ footer section p {
   margin-top: -5px;
 }
 
-#timeSlider::-webkit-slider-runnable-track {
+#wideTimeSlider::-webkit-slider-runnable-track {
   width: 700px;
   height: 5px;
   appearance: none;
@@ -339,6 +355,7 @@ footer h1 {
 }
 
 #rightHead {
+  width: 50%;
   margin-right: 40px;
 }
 
@@ -1465,6 +1482,7 @@ footer h1 {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  padding-right: 20px;
 }
 
 .recommendedSongInfoCol h1 {
@@ -1547,10 +1565,19 @@ footer h1 {
   width: 100%;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 900px) {
   #aboutElliotContent {
     display: flex;
     flex-direction: column;
+  }
+
+  #contextMenuCont {
+    z-index: 22;
+  }
+
+  #aboutElliotTitle {
+    padding-left: 20px;
+    font-size: 35px;
   }
 
   #aboutElliotImg {
@@ -1558,14 +1585,861 @@ footer h1 {
     width: auto;
   }
 
-  #aboutElliotPara {
-    margin-left: 0px;
-  }
-
   #elliotSmithlaundromat {
     width: 200px;
     height: 400px;
     background-size: cover;
     object-fit: cover;
+  }
+
+  #navContainer {
+    display: none;
+    width: 0px;
+  }
+
+  #mainWrap {
+    padding-left: 0px;
+    padding-right: 0px;
+    box-sizing: border-box;
+  }
+
+  #headerBodyCont {
+    padding-left: 0px;
+    padding-right: 0px;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    padding-bottom: 115px;
+    box-sizing: border-box;
+    background-color: #26314c;
+  }
+
+  #headerBodyCont div {
+    box-sizing: border-box;
+  }
+
+  #homeWrap {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  #homeBanner {
+    padding: 0px;
+    margin-left: 0px;
+    padding-top: 85px;
+  }
+
+  #recommendedTracks {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-auto-rows: 0;
+    height: 230px;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 0px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-left: 10px;
+    padding-right: 10px;
+    box-sizing: border-box;
+  }
+
+  .recommendedSongRow {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  #aboutElliotContainer {
+    margin-left: 0px;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  #aboutElliotPara {
+    box-sizing: border-box;
+    margin: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  #header {
+    position: fixed;
+    z-index: 23;
+    background-color: #0c1736;
+  }
+
+  #mobileHeaderHead {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    box-sizing: border-box;
+  }
+
+  .closedHamburger {
+    width: 100%;
+    height: 0px;
+    z-index: 20;
+    box-sizing: border-box;
+    position: relative;
+    padding-left: 20px;
+    padding-right: 20px;
+    animation-name: close;
+  }
+
+  .openHamburger {
+    height: 100vh;
+    width: 100%;
+    box-sizing: border-box;
+    position: fixed;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: #0c1736;
+    animation-name: open;
+    animation-duration: 0.25s;
+  }
+
+  @keyframes open {
+    from {
+      height: 0px;
+    }
+    100% {
+      height: 100%;
+    }
+  }
+
+  @keyframes close-modal {
+    from {
+      height: 100%;
+    }
+    top {
+      height: 0px;
+    }
+  }
+
+  #leftHead {
+    width: 0px;
+    height: 0px;
+    margin: 0px;
+  }
+
+  #rightHead {
+    width: 100%;
+    position: relative;
+    margin: 0px;
+  }
+  #hamburger {
+    width: 50px;
+    height: 50px;
+    color: white;
+    position: absolute;
+    top: 2px;
+    left: 20px;
+    cursor: pointer;
+  }
+
+  #elliotSmithLogoMobile {
+    height: 50px;
+    width: 200px;
+  }
+
+  #mobileNavMenu {
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    position: relative;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding-bottom: 20px;
+    z-index: 25;
+  }
+
+  .openMobileNavMenu {
+    display: flex !important;
+  }
+
+  .closedMobileNavMenu {
+    display: none !important;
+  }
+
+  #mobileNavMenuFooter {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  #signUpButtonMobile {
+    width: 250px;
+    height: 45px;
+    margin-bottom: 30px;
+    border: 0px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #f5f5f5;
+    color: black;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #loginButtonMobile {
+    width: 250px;
+    height: 45px;
+    border: 0px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #f5f5f5;
+    color: black;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #mobileNavMenuBody {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 0px;
+    color: white;
+    padding-top: 20px;
+    text-align: left;
+    max-height: 60%;
+    box-sizing: border-box;
+  }
+
+  #mobileNavMenuBody li {
+    margin-left: -20px;
+    margin-bottom: 20px;
+  }
+
+  .navLinks {
+    font-size: 25px;
+  }
+
+  #playlistsMobile {
+    overflow: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    flex-direction: column;
+  }
+
+  #Layer_0 {
+    height: 50px;
+    width: 200px;
+  }
+
+  /*Mobile Seacrch Stylings*/
+
+  #searchPageCont {
+    padding-top: 100px;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+    height: 100%;
+    overflow: auto;
+  }
+
+  #searchBar {
+    width: 100%;
+    margin: 0px;
+    padding-left: 10px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+  }
+
+  #searchResults {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-left: 0px;
+    margin-right: 0px;
+    border-spacing: collapse;
+    grid-column-gap: 0px;
+  }
+
+  .songRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    color: #f5f5f5;
+  }
+
+  .playButtonContSongRow:before {
+    position: relative;
+    height: 90px;
+    width: 90px;
+  }
+
+  .playButtonSongRow {
+    height: 25px;
+    width: 25px;
+    margin-left: 21px;
+    margin-top: 17px;
+    position: absolute;
+    z-index: 9;
+    cursor: pointer;
+  }
+
+  .songInfoCol {
+    padding-bottom: 5px;
+  }
+
+  .songImgCol {
+    height: 60px;
+    width: 60px;
+  }
+
+  .songImg {
+    height: 60px;
+    width: 60px;
+  }
+
+  #footer {
+    height: 65px;
+    z-index: 21;
+    background-color: rgba(12, 23, 54, 0.9);
+  }
+
+  #mobileFooter {
+    width: 100%;
+  }
+
+  #mobileCurrentAlbum {
+    width: 50px;
+    height: 50px;
+    margin-right: 0px;
+  }
+
+  #mobileCurrentAlbum img {
+    width: 50px;
+    height: 50px;
+  }
+
+  #mobileCurrentSongCont {
+    position: absolute;
+    width: 100%;
+    height: 50px;
+    top: -50px;
+    background-color: #0c1736;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  #mobileCurrentSongLeft {
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+  }
+
+  #mobileCurrentSongRight {
+    display: flex;
+    align-items: center;
+    height: 50px;
+  }
+
+  #mobileCurrentSong {
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 10px;
+  }
+
+  #mobileCurrentSong p {
+    font-size: 14px;
+    margin: 0px;
+    color: #f5f5f5;
+  }
+
+  #loadedSongInfo {
+    width: 30%;
+    padding-left: 10px;
+  }
+
+  #topLayerControls {
+    padding-top: 10px;
+    margin-bottom: 2px;
+  }
+
+  #timeSliderCont {
+    display: flex;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    box-sizing: border-box;
+  }
+
+  #fullscreenTimeSlider {
+    width: 100%;
+    height: 2px;
+    appearance: none;
+    background: #f5f5f5;
+    border-radius: 2px;
+    position: relative;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  #fullscreenTimeSlider::before {
+    content: "";
+    height: 2px;
+    width: var(--seek-before-width);
+    outline: none;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border: 0px solid;
+    z-index: 2;
+    position: absolute;
+    background: white;
+    margin-bottom: 0px;
+  }
+
+  #fullscreenTimeSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    border: none;
+    position: relative;
+    z-index: 3;
+    background-color: lightblue;
+    margin-top: -8px;
+  }
+
+  #fullscreenTimeSlider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 2px;
+    appearance: none;
+    background: grey;
+    border-radius: 2px;
+    position: relative;
+    outline: none;
+  }
+
+  #mobileTimeSlider {
+    width: 100%;
+    height: 2px;
+    border-radius: 0px;
+    margin-bottom: -2px;
+    margin-right: 0px;
+    margin-left: 0px;
+    border: 0px;
+  }
+
+  #mobileTimeSlider::before {
+    content: "";
+    height: 2px;
+    width: var(--seek-before-width);
+    outline: none;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border: 0px solid;
+    z-index: 2;
+    position: absolute;
+    background: white;
+    margin-bottom: 0px;
+  }
+
+  #mobileTimeSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 0px;
+    width: 0px;
+    border-radius: 50%;
+    border: none;
+    background-color: none;
+    z-index: 3;
+    margin-top: -5px;
+    display: none;
+  }
+
+  #mobileTimeSlider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 2px;
+    appearance: none;
+    background: grey;
+    border-radius: 2px;
+    position: relative;
+    outline: none;
+  }
+
+  #footerMenuCont {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: absolute;
+    top: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+    padding-top: 4px;
+  }
+
+  #footerMenuCont div {
+    height: 100%;
+    width: 100px;
+  }
+
+  .footerLinks {
+    width: 100%;
+    height: 100%;
+    color: #f5f5f5;
+    text-decoration: none;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    box-sizing: border-box;
+  }
+
+  #createPlaylistButton {
+    width: 100px;
+    height: 100%;
+  }
+
+  #createPlaylistButton div {
+    width: 100%;
+    height: 100%;
+    color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    box-sizing: border-box;
+  }
+
+  #createPlaylistButton div svg {
+    margin: 0px;
+  }
+
+  .footerSymbols {
+    width: 30px;
+    height: 30px;
+  }
+
+  #audioPlayerModuleCont {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  #mobileAudioPlayerCont {
+    display: flex;
+    position: fixed;
+    width: 100vw !important;
+    height: 100vh !important;
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    background-color: rgba(12, 23, 54, 0.95);
+    z-index: 26;
+  }
+
+  #mobileAudioPlayer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+  }
+
+  #mobileSongInfoRowCont h1 {
+    font-size: 26px;
+    font-weight: 500;
+    color: #f5f5f5;
+    margin-bottom: 5px;
+  }
+
+  #mobileSongInfoRowCont p {
+    font-size: 22px;
+    font-weight: 500;
+    color: #f5f5f5;
+    margin-top: 5px;
+  }
+
+  #mobileSongTopLayerCont {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    padding-top: 20px;
+    margin-bottom: 40px;
+    color: #f5f5f5;
+  }
+
+  #mobileSongAlbumCoverCont {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    box-sizing: border-box;
+  }
+
+  #mobileSongAlbumCoverCont img {
+    width: 100%;
+    height: auto;
+    max-width: 425px;
+    max-height: 425px;
+    background-color: black;
+  }
+
+  #mobileSongTimeBarCont {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #mobileSongTimeBarTime div p {
+    margin-top: 10px;
+    margin-bottom: 0px;
+  }
+
+  #mobileSongTimeBarTime {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 0px;
+  }
+
+  .timeSliderFullScreen::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 15px !important;
+    width: 15px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    position: relative !important;
+    z-index: 3 !important;
+    background-color: lightblue !important;
+    margin-top: -5px;
+  }
+
+  #mobileTopLayerControls {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+
+  /*Mobile Album Styling*/
+
+  #albumCont {
+    padding-top: 100px;
+  }
+
+  #album {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+  }
+
+  #albumHead {
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 0px;
+  }
+
+  #albumImgCont {
+    width: 250px;
+    height: 250px;
+    margin-right: 0px;
+  }
+  #albumImg {
+    width: 250px;
+    height: 250px;
+  }
+
+  #albumImg img {
+    width: 250px !important;
+    height: 250px !important;
+  }
+
+  #mobileAlbumText {
+    width: 100%;
+    border-bottom: 1px solid white;
+    padding-bottom: 20px;
+  }
+
+  #mobileAlbumText h1 {
+    margin-bottom: 0px;
+    margin-top: 20px;
+  }
+
+  #mobileAlbumText p {
+    margin-top: 5px;
+    margin-bottom: 0px;
+  }
+
+  .albumSongRow {
+    display: flex;
+  }
+
+  .albumSongNum {
+    width: 30px;
+  }
+
+  .albumSongTitleCol {
+    padding-left: 10px;
+  }
+
+  .albumSongLength {
+    width: 50px;
+  }
+
+  .visibleContextMenu {
+    width: 50px;
+  }
+
+  #albumTableHead {
+    display: none;
+  }
+
+  /*Playlist Styling*/
+
+  #playlistCont {
+    padding-top: 100px;
+  }
+
+  #playlist {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+  }
+
+  #playlistHead {
+    flex-direction: column;
+    padding-bottom: 20px;
+    border-bottom: 1px solid white;
+  }
+
+  #playlistImgCont {
+    width: 100%;
+    height: 250px;
+    display: flex;
+    background-color: #26314c;
+    justify-content: center;
+    margin: 0px;
+  }
+
+  #playlistImg {
+    width: 250px;
+    height: 250px;
+    background-color: black;
+  }
+
+  #mobilePlaylistText h1 {
+    margin-bottom: 0px;
+  }
+
+  #mobilePlaylistText p {
+    margin-top: 10px;
+    margin-bottom: 0px;
+  }
+
+  #playlistTableHead {
+    display: none;
+  }
+
+  .playlistSongRow {
+    display: flex;
+  }
+
+  .playlistSongNum {
+    width: 40px;
+    margin-right: 0px;
+  }
+
+  .playlistSongImg {
+    width: 60px;
+    margin-right: 10px;
+  }
+
+  .playlistSongTitleCol {
+    padding-left: 0px;
+    width: 100%;
+  }
+
+  .playlistSongLength {
+    width: 50px;
+  }
+
+  /*Create Account Mobile */
+
+  #createAccContainer {
+    position: fixed;
+    padding-top: 90px;
+    padding-bottom: 100px;
+    box-sizing: border-box;
+  }
+
+  #homeLinkCreateAccount {
+    display: none;
+  }
+
+  #createAccContainer h1 {
+    margin-bottom: 20px;
+  }
+
+  #createAccountForm {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+  }
+  #createAccountForm label {
+    width: 100%;
+  }
+
+  #createAccountForm input {
+    width: 100%;
+  }
+
+  /*Login Mobile*/
+
+  #loginContainer {
+    justify-content: center;
+    display: flex;
+    background-color: #26314c;
+  }
+
+  #loginForm {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+  }
+
+  #submitButton {
+    width: 100%;
+  }
+
+  #homeLink {
+    display: none;
+  }
+
+  #loginForm input {
+    width: 100%;
+    box-sizing: border-box;
   }
 }

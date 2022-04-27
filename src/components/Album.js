@@ -29,6 +29,12 @@ const Album = (props) => {
 
   const [albumArtPath, setAlbumArtPath] = useState("");
 
+  const [deviceSize, setDeviceSize] = useState(window.innerWidth);
+
+  window.addEventListener("resize", () => {
+    setDeviceSize(window.innerWidth);
+  });
+
   const { x, y, showMenu, songID, whichMenu, clickedSongID, song } =
     useRightClick();
 
@@ -146,6 +152,39 @@ const Album = (props) => {
     }
   }, [albumSongs]);
 
+  const mobileChecker = () => {
+    if (deviceSize > 900) {
+      return (
+        <div id="albumText">
+          <h3>ALBUM</h3>
+          <h1 id="albumTitle">{albumInfo.albumTitle}</h1>
+          <div id="albumInfo">
+            <p>
+              {albumInfo.artistName} &#8226; {albumInfo.releaseYear} &#8226;{" "}
+              {albumInfo.trackCount} songs,{" "}
+              {() => {
+                if (totalHours > 0) {
+                  return `${totalHours} hours`;
+                }
+              }}{" "}
+              {totalMinutes} minutes {totalSeconds} seconds
+            </p>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div id="mobileAlbumText">
+          <h1>{albumInfo.albumTitle}</h1>
+          <p>
+            Album &#8226; {albumInfo.releaseYear} &#8226; {albumInfo.trackCount}{" "}
+            songs
+          </p>
+        </div>
+      );
+    }
+  };
+
   return (
     <div id="albumCont">
       {checkContextMenu()}
@@ -159,28 +198,13 @@ const Album = (props) => {
               ></img>
             </div>
           </div>
-          <div id="albumText">
-            <h3>ALBUM</h3>
-            <h1 id="albumTitle">{albumInfo.albumTitle}</h1>
-            <div id="albumInfo">
-              <p>
-                {albumInfo.artistName} &#8226; {albumInfo.releaseYear} &#8226;{" "}
-                {albumInfo.trackCount} songs,{" "}
-                {() => {
-                  if (totalHours > 0) {
-                    return `${totalHours} hours`;
-                  }
-                }}{" "}
-                {totalMinutes} minutes {totalSeconds} seconds
-              </p>
-            </div>
-          </div>
+          {mobileChecker()}
         </header>
         <div id="albumBody">
           <div id="albumTable">
             <div id="albumTableHead">
               <div id="songOrderCol">#</div>
-              <div>TITLE</div>
+              <div id="songTitleCol">TITLE</div>
               <div>
                 <IoTimeOutline style={{ width: "20px", height: "20px" }} />
               </div>

@@ -14,6 +14,12 @@ const Playlist = (props) => {
   const { x, y, showMenu, songID, whichMenu, clickedOrderID, albumID, song } =
     useRightClick();
 
+  const [deviceSize, setDeviceSize] = useState(window.innerWidth);
+
+  window.addEventListener("resize", () => {
+    setDeviceSize(window.innerWidth);
+  });
+
   const checkContextMenu = () => {
     if (whichMenu === "playlist-song") {
       return (
@@ -184,6 +190,35 @@ const Playlist = (props) => {
       });
   }, [props.match.params.id]);
 
+  const mobileChecker = () => {
+    if (deviceSize > 900) {
+      return (
+        <div id="playlistText">
+          <h3>PLAYLIST</h3>
+          <h1 id="playlistTitle">{playlist.title}</h1>
+          <div id="playlistInfo">
+            <p>
+              {playlist.username} &#8226; {songs.length} songs,{" "}
+              {() => {
+                if (totalHours > 0) {
+                  return `${totalHours} hours`;
+                }
+              }}{" "}
+              {totalMinutes} minutes {totalSeconds} seconds
+            </p>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div id="mobilePlaylistText">
+          <h1>{playlist.title}</h1>
+          <p>Playlist &#8226; {songs.length} songs</p>
+        </div>
+      );
+    }
+  };
+
   return (
     <div id="playlistCont">
       {checkContextMenu()}
@@ -192,21 +227,7 @@ const Playlist = (props) => {
           <div id="playlistImgCont">
             <div id="playlistImg"></div>
           </div>
-          <div id="playlistText">
-            <h3>PLAYLIST</h3>
-            <h1 id="playlistTitle">{playlist.title}</h1>
-            <div id="playlistInfo">
-              <p>
-                {playlist.username} &#8226; {songs.length} songs,{" "}
-                {() => {
-                  if (totalHours > 0) {
-                    return `${totalHours} hours`;
-                  }
-                }}{" "}
-                {totalMinutes} minutes {totalSeconds} seconds
-              </p>
-            </div>
-          </div>
+          {mobileChecker()}
         </header>
         <div id="playlistBody">
           <div id="playlistTable">

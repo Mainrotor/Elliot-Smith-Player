@@ -31,6 +31,13 @@ const Main = () => {
     });
   });
 
+  const adjustFooterPadding = () => {
+    const copy = {
+      songData: store.getState().currentSong,
+    };
+    console.log(copy.songData);
+  };
+
   return (
     <Provider store={store}>
       <BrowserRouter id="pageWrap">
